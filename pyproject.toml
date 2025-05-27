@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "audio-aligner"
+dynamic = ["version"]
+dependencies = [
+    "click==8.1.8",
+    "av==14.4.0",
+    "scipy==1.15.3",
+    "numpy==2.2.6",
+    "librosa==0.11.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pyinstaller",
+]
+
+[project.scripts]
+audio-aligner-cli = "audio_aligner.main:align_audio_cli"
+
+[tool.hatch.version]
+path = "audio_aligner/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["/audio_aligner"]
+
+[tool.hatch.build.targets.wheel]
+include = ["/audio_aligner"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ARG001",
+    "BLE001",
+    "C901",
+    "COM812",
+    "D1",
+    "D203",
+    "D213",
+    "EM101",
+    "FIX002",
+    "PLR0912",
+    "PLR0913",
+    "PLW0603",
+    "TD",
+    "TRY003",
+    "TRY301",
+]
+
+[tool.ruff.lint.flake8-quotes]
+avoid-escape = true
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = true
+force-wrap-aliases = true
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.mypy]
+pretty = true
+install_types = true
+non_interactive = true
+ignore_missing_imports = true
+no_error_summary = true
+namespace_packages = true
+follow_imports = "skip"
