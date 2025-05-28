@@ -63,3 +63,44 @@ Using `MAX_DURATION_S = 120 * 60 = 7200s`, `SAMPLE_RATE_HZ = 48000`, `CHUNK_DURA
 *   Processing time scales with `--max-duration`.
 *   Increase `--num-workers` to reduce time (at the cost of RAM).
 *   `onset` method is generally slower than `rms`.
+
+## How It Works
+
+The tool follows these steps to determine the audio delay:
+
+1.  **Audio Extraction:**
+    *   Extracts audio from the specified tracks of both the reference and secondary video files.
+    *   Alternatively, can directly process provided audio files.
+    *   If `--max-duration` is set (e.g., to 1800 for 30 minutes), only the initial segment of this duration is 
+    extracted from each audio source. Otherwise, the full audio is used.
+
+2.  **Preprocessing:**
+    *   Converts both audio streams to WAV format internally.
+    *   Resamples audio from both sources to a consistent sample rate (default: 48000 Hz, controlled by `--sample-rate`)
+    to ensure accurate comparison.
+    *   Converts audio to mono by averaging channels if the original is stereo or multi-channel.
+
+3.  **Chunking:**
+    *   Divides the audio streams into smaller, manageable chunks.
+    *   The duration of these chunks is controlled by `--chunk-duration` (default: 300 seconds / 5 minutes).
+
+4.  **Feature Aggregation (per chunk):**
+    *   For each corresponding pair of chunks (one from reference, one from secondary), a feature time series is
+    generated at a high temporal resolution (aiming for ~1 millisecond).
+    *   Two methods are available (`--method`):
+        *   **`onset` (default):** Calculates an onset strength envelope. This represents the "suddenness" or intensity
+        of new sound events occurring at each millisecond.
+        *   **`rms`:** Calculates a Root Mean Square (RMS) energy envelope. This represents the loudness of the audio
+        over a very short window (~12 milliseconds) at each millisecond.
+
+5.  **Cross-Correlation (per chunk):**
+    *   For each pair of feature time series, the algorithm finds the time offset (delay) that results in the highest
+    cross-correlation score.
+    *   This determines the most likely delay for that specific chunk.
+
+6.  **Results & Aggregation:**
+    *   The tool outputs the estimated delay found for each individual chunk pair.
+    *   It then calculates and displays aggregate statistics from all chunk delays, such as:
+        *   **Median:** Often the most robust estimate of the overall delay.
+        *   **Mean (Average):** The average delay.
+        *   **Min/Max:** The minimum and maximum delays found across chunks.
