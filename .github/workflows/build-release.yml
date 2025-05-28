@@ -13,7 +13,7 @@ jobs:
     name: Build Windows EXE
     runs-on: windows-latest
     outputs:
-      artifact_download_name: audio-aligner-${{ github.ref_name }}
+      artifact_download_name: audio-aligner-win-${{ github.ref_name }}
       asset_upload_name: audio-aligner-${{ github.ref_name }}.exe
       original_asset_filename: audio-aligner.exe
     steps:
@@ -40,14 +40,14 @@ jobs:
     - name: Upload Windows EXE artifact
       uses: actions/upload-artifact@v4
       with:
-        name: audio-aligner-${{ github.ref_name }}
+        name: audio-aligner-win-${{ github.ref_name }}
         path: dist/audio-aligner.exe
 
   build-linux-executable:
     name: Build Linux Executable
     runs-on: ubuntu-latest
     outputs:
-      artifact_download_name: audio-aligner-${{ github.ref_name }}
+      artifact_download_name: audio-aligner-linux-${{ github.ref_name }}
       asset_upload_name: audio-aligner-${{ github.ref_name }}
       original_asset_filename: audio-aligner
     steps:
@@ -74,7 +74,7 @@ jobs:
     - name: Upload Linux Executable artifact
       uses: actions/upload-artifact@v4
       with:
-        name: audio-aligner-${{ github.ref_name }}
+        name: audio-aligner-linux-${{ github.ref_name }}
         path: dist/audio-aligner
 
   create-github-release:
