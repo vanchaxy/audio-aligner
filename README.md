@@ -38,7 +38,7 @@ The following formula approximates RAM usage in MB, based on observed values wit
 `Total RAM (MB) = ( (MAX_DURATION_S * SAMPLE_RATE_HZ * 8) + (CHUNK_DURATION_S * NUM_WORKERS * WORKER_FACTOR_BYTES_PER_S) ) / (1024 * 1024)`
 
 Where:
-*   `MAX_DURATION_S`: Value of `--process-duration` (if 0, use full video length in seconds).
+*   `MAX_DURATION_S`: Value of `--maxduration` (if 0, use full video length in seconds).
 *   `SAMPLE_RATE_HZ`: Value of `--sample-rate`.
 *   `8`: Represents bytes for stereo audio (2 tracks * 4 bytes/sample for float32).
 *   `CHUNK_DURATION_S`: Value of `--chunk-duration`.
@@ -55,7 +55,7 @@ Using `MAX_DURATION_S = 120 * 60 = 7200s`, `SAMPLE_RATE_HZ = 48000`, `CHUNK_DURA
 *   Decrease `--chunk-duration` (especially effective for `onset` method).
 *   Decrease `--num-workers`.
 *   Use `rms` method instead of `onset`.
-*   Decrease `--process-duration`.
+*   Decrease `--max-duration`.
 *   Decrease `--sample-rate`.
 
 **Processing Time:**
